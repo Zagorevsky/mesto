@@ -1,0 +1,8 @@
+/* Тонкая сплошная линия в 1пх */
+.header__line {
+  height: 0;
+  border: none;
+  border-top: 1px solid #545454;
+  margin: 0;
+  padding: 0;
+}
