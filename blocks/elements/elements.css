@@ -1,3 +1,4 @@
+/* грид-контейнер для всех фото */
 .elements {
   display: grid;
   max-width: 880px;
