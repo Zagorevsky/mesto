@@ -10,8 +10,8 @@ let form = document.querySelector('.popup__form');
 // Обработчик включения и выключения окна попап: кнопка редактировать профиль и закрыть попап
 function togglePopup() {
   form.reset();
-  fullNameInput.setAttribute('value', fullNameProfile.textContent);
-  descriptionInput.setAttribute('value', descriptionProfile.textContent);
+  fullNameInput.value = fullNameProfile.textContent;
+  descriptionInput.value = descriptionProfile.textContent;
   popup.classList.toggle('popup_opened');
 }
 
