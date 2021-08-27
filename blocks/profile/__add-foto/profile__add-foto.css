@@ -6,7 +6,7 @@
   background-color: #000000;
   background-image: url(../../../images/add-button.svg);
   border: 0;
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
 }
 
 .profile__add-foto:hover {

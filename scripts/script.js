@@ -3,8 +3,8 @@ let popupClose = document.querySelector('.popup__close');
 let popup = document.querySelector('.popup');
 let fullNameProfile = document.querySelector('.profile__full-name');
 let descriptionProfile = document.querySelector('.profile__description');
-let fullNameInput = document.querySelector('.popup__full-name');
-let descriptionInput = document.querySelector('.popup__description');
+let fullNameInput = document.querySelectorAll('.popup__txt')[0];
+let descriptionInput = document.querySelectorAll('.popup__txt')[1];
 let form = document.querySelector('.popup__form');
 
 // Обработчик включения и выключения окна попап: кнопка редактировать профиль и закрыть попап
@@ -26,7 +26,7 @@ function formSubmit(event) {
 // Слушаем кнопку Редактировать профиль
 profileEdit.addEventListener('click',togglePopup);
 
-// Слушае кнопку Закрыть попап
+// Слушаем кнопку Закрыть попап
 popupClose.addEventListener('click',togglePopup);
 
 // Слушаем кнопку Сохранить попап

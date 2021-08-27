@@ -1,20 +1,22 @@
 .header__logo {
-  width: 142px;
+  width: 141px;
   height: 33px;
   padding: 0;
   margin: 0 0 41px 0;
+  background-image: url("../../../images/logo.svg");
+  background-size: 141px 33px;
 }
 
 /* Делаем логотип черным при наведении курсора */
 .header__logo:hover {
-  opacity: 0;
-  cursor: pointer;
+  background-image: url("../../../images/logo-black.svg");
 }
 
 @media screen and (max-width: 890px){
   .header__logo {
     width: 104px;
     height: 24px;
+    background-size: 104px 24px;
     margin: 0 0 32px 27px;
   }
 }

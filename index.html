@@ -14,7 +14,7 @@
 <body class="page">
   <div class="page__container">
     <header class="header">
-      <img class="header__logo" src="./images/logo.svg" alt="Логотип Mesto">
+      <div class="header__logo"></div>
     </header>
     <main class="content">
       <section class="profile">
@@ -28,59 +28,48 @@
         </div>
         <button class="profile__add-foto" type="button"></button>
       </section>
-      <section class="popup">
-        <div class="popup__content">
-          <button class="popup__close"></button>
-          <h2 class="popup__title">Редактировать профиль</h2>
-          <form class="popup__form">
-            <input class="popup__full-name popup__txt" type="text" name="full-name">
-            <input class="popup__description popup__txt" type="text" name="description">
-            <button class="popup__submit" type="submit"></button>
-          </form>
-        </div>
-      </section>
-      <section class="">
+      <section>
         <ul class="elements">
           <li class="element">
-            <img class="element__foto" src="./images/Nigigorodskay.jpg" alt="">
+            <img class="element__foto" src="./images/Nigigorodskay.jpg" alt="Река в Новгородской области">
             <div class="element__blok">
               <h2 class="element__title">Новгородская область</h2>
-              <button class="element__favorit"></button>
+              <button class="element__favorit" type="button"></button>
             </div>
           </li>
           <li class="element">
-            <img class="element__foto" src="./images/Pereslavl-Zalessky.jpg" alt="">
+            <img class="element__foto" src="./images/Pereslavl-Zalessky.jpg" alt="Кремль в Переславль-Залесском">
             <div class="element__blok">
               <h2 class="element__title">Переславль-Залесский</h2>
-              <button class="element__favorit"></button>
+              <button class="element__favorit" type="button"></button>
             </div>
           </li>
           <li class="element">
-            <img class="element__foto" src="./images/Elbrus.jpg" alt="">
+            <img class="element__foto" src="./images/Elbrus.jpg" alt="Гора Эльбрус">
             <div class="element__blok">
               <h2 class="element__title">Эльбрус</h2>
-              <button class="element__favorit"></button>
+              <button class="element__favorit" type="button"></button>
             </div>
           </li>
           <li class="element">
-            <img class="element__foto" src="./images/Hcegemskoe.jpg" alt="">
+            <img class="element__foto" src="./images/Hcegemskoe.jpg" alt="Чегемское ущелье в сердце Кабардино-Балкарии">
             <div class="element__blok">
               <h2 class="element__title">Чегемское ущелье</h2>
-              <button class="element__favorit"></button>
+              <button class="element__favorit" type="button"></button>
             </div>
           </li>
           <li class="element">
-            <img class="element__foto" src="./images/Kavkaz.jpg" alt="">
+            <img class="element__foto" src="./images/Kavkaz.jpg" alt="Красота Кавказских гор">
             <div class="element__blok">
               <h2 class="element__title">Кавказские горы</h2>
-              <button class="element__favorit"></button>
+              <button class="element__favorit" type="button"></button>
             </div>
           </li>
           <li class="element">
-            <img class="element__foto" src="./images/Roza-Hutor.jpg" alt="">
+            <img class="element__foto" src="./images/Roza-Hutor.jpg" alt="Роза Хутор на Красной Поляне">
             <div class="element__blok">
               <h2 class="element__title">Роза хутор</h2>
-              <button class="element__favorit"></button>
+              <button class="element__favorit" type="button"></button>
             </div>
           </li>
         </ul>
@@ -89,6 +78,17 @@
     <footer class="footer">
       <p class="footer__txt">&copy; 2020 Mesto Russia</p>
     </footer>
+    <section class="popup">
+      <div class="popup__content">
+        <button class="popup__close" type="button"></button>
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <form class="popup__form" name="profile-name">
+          <input class="popup__txt" type="text" name="full-name">
+          <input class="popup__txt" type="text" name="description">
+          <button class="popup__submit" type="submit"></button>
+        </form>
+      </div>
+    </section>
   </div>
   <script src="./scripts/script.js"></script>
 </body>

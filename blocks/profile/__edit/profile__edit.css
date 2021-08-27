@@ -18,6 +18,6 @@
   .profile__edit {
     width: 18px;
     height: 18px;
-    background-image: url(../../../images/edit-button-min.svg);
+    background-size: 18px 18px;
   }
 }
