@@ -9,7 +9,8 @@
 
 /* Делаем логотип черным при наведении курсора */
 .header__logo:hover {
-  background-image: url("../../../images/logo-black.svg");
+  opacity: 0.6;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 890px){
