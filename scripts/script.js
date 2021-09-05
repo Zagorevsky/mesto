@@ -32,37 +32,40 @@ const descriptionProfile = document.querySelector('.profile__description');
 // Получаем кнопку редактировать профиль
 const profileEdit = document.querySelector('.profile__edit');
 // Получаем кнопку добавить карту
-const addCard = document.querySelector('.profile__add-card');
+const buttonAddCard = document.querySelector('.profile__add-card');
 // Получаем контейнер для размещения карточек с фото
 const elements = document.querySelector('.elements');
 // Получаем шаблон для карточек с фото
 const elementTemplate = document.querySelector('#element').content;
 // Получаем попап для редактирования профиля
-const popupProfil = document.querySelector('.popup_profil');
+const popupProfile = document.querySelector('.popup_profile');
 // Получаем попап для добавления новой карты
 const popupCard = document.querySelector('.popup_card');
 // Получаем попап для просмотра картинки в попап
 const popupImg = document.querySelector('.popup_img');
-// Храним готовую карточку
-let element
-// Имя карточки и ссылка на карточку
-let nameCards
-let linkCards
-//   Имя попап
-let namePopup
 
+const fullNameProfilePopup = popupProfile.querySelector('[name="full-name"]');
+const descriptionProfilePopup = popupProfile.querySelector('[name="description"]');
+
+function setEventListener() {
 // Слушатель кнопки - редактировать профиль
-function listenProfileEdit () {
-  profileEdit.addEventListener('click',createPopupProfil);
-}
-
+  profileEdit.addEventListener('click',openPopupProfil);
 // Слушатель кнопки - добавить карту
-function listenAddCard () {
-  addCard.addEventListener('click', createPopupCard);
+  buttonAddCard.addEventListener('click', openPopupCard);
+// Слушатель кнопки закрыть попап Профиль
+  popupProfile.querySelector('.popup__close').addEventListener('click', ()=>{closePopup(popupProfile)});
+// Слушатель кнопки закрыть попап Новая карточка
+popupCard.querySelector('.popup__close').addEventListener('click',()=>{closePopup(popupCard)});
+// Слушатель кнопки закрыть попап Фото
+  popupImg.querySelector('.popup__close').addEventListener('click', ()=>{closePopup(popupImg)});
+// Слушатель кнопки отправить форму Профиль
+  popupProfile.querySelector('.popup__form').addEventListener('submit', sendFormProfil);
+// Слушатель кнопки отправить форму Новая карточка
+  popupCard.querySelector('.popup__form').addEventListener('submit', sendFormNewCard);
 }
 
 // Обработчик кнопки корзина
-function delCards(evt) {
+function deleteCard(evt) {
   evt.target.closest('.element').remove();
 }
 // Обработчик кнопки лайк
@@ -81,70 +84,59 @@ function closePopup (namePopup) {
 }
 
 // Создатель карточки Новое место с названием, фото, и слушателями кнопок: лайк и корзина
-function addCards (nameCards, linkCards) {
+function addCard (nameCard, linkCard) {
   // клонируем шаблон карточки
   element = elementTemplate.querySelector('.element').cloneNode(true);
   // наполняем карточку содержимым - фото, заголовок и описание
-  element.querySelector('.element__title').textContent = nameCards;
-  element.querySelector('.element__foto').src = linkCards;
-  element.querySelector('.element__foto').alt = `На фото ${nameCards}`;
+  element.querySelector('.element__title').textContent = nameCard;
+  element.querySelector('.element__foto').src = linkCard;
+  element.querySelector('.element__foto').alt = `На фото ${nameCard}`;
   // добавляем слушатель клика по кнопке лайк
   element.querySelector('.element__like').addEventListener('click', toggleLike);
   // добавляем слушатель клика по кнопке корзина
-  element.querySelector('.element__trash').addEventListener('click', delCards);
+  element.querySelector('.element__trash').addEventListener('click', deleteCard);
   // добавляем слушатель клика по картинке
-  element.querySelector('.element__foto').addEventListener('click', openImages);
+  element.querySelector('.element__foto').addEventListener('click', openImage);
   // возвращаем готовую карточку
   return element;
 }
 
 // Обработчик клика по фото карточки
-function openImages (evt) {
+function openImage (evt) {
   // Получаем карточку по которой кликнули
-  element = evt.target.closest('.element');
+  const element = evt.target.closest('.element');
   // Наполняем попап данными из карточки
   popupImg.querySelector('.popup__image').src = element.querySelector('.element__foto').src;
   popupImg.querySelector('.popup__image').alt = element.querySelector('.element__foto').alt;
   popupImg.querySelector('.popup__title-img').textContent = element.querySelector('.element__title').textContent;
-  // слушатель кнопки закрыть попап
-  popupImg.querySelector('.popup__close').addEventListener('click',function(){closePopup(popupImg)});
   // Открываем попап
   openPopup (popupImg);
 }
 
-// Создатель попап для редактировать профиля
-function createPopupProfil() {
-  popupProfil.querySelector('.popup__form').reset();
-  popupProfil.querySelectorAll('.popup__txt')[0].value = fullNameProfile.textContent;
-  popupProfil.querySelectorAll('.popup__txt')[1].value = descriptionProfile.textContent;
-  openPopup(popupProfil);
-  // слушатель кнопки закрыть попап
-  popupProfil.querySelector('.popup__close').addEventListener('click', function(){closePopup(popupProfil)});
-  // слушатель кнопки отправить форму
-  popupProfil.querySelector('.popup__form').addEventListener('submit', sendFormProfil);
+// Октрыть попап для редактировать профиля
+function openPopupProfil() {
+  fullNameProfilePopup.value = fullNameProfile.textContent;
+  descriptionProfilePopup.value = descriptionProfile.textContent;
+  openPopup(popupProfile);
 }
 
-// Обработчик кнопки - сохранить форму в профиль попап
+// Обработчик отправки формы профиль 
 function sendFormProfil(event) {
   // Отменяем стандартную отправку формы
   event.preventDefault();
   // Наполняем данными попап
-  fullNameProfile.textContent = popupProfil.querySelectorAll('.popup__txt')[0].value;
-  descriptionProfile.textContent = popupProfil.querySelectorAll('.popup__txt')[1].value;
+  fullNameProfile.textContent = fullNameProfilePopup.value;
+  descriptionProfile.textContent = descriptionProfilePopup.value;
   // Закрываем попап
-  closePopup(popupProfil);
+  closePopup(popupProfile);
 }
 
-// Создатель попап для создания карточки Новое место
-function createPopupCard(){
+// Открыть попап для создания карточки Новое место
+function openPopupCard(){
   // Делаем сброс формы
   popupCard.querySelector('.popup__form').reset();
   // Открываем попап
   openPopup(popupCard);
-  // слушатель кнопки закрыть попап Новое место
-  popupCard.querySelector('.popup__close').addEventListener('click',()=>{closePopup(popupCard)});
-  // слушатель кнопки отправить форму Новое место
-  popupCard.querySelector('.popup__form').addEventListener('submit', sendFormNewCard);
 };
 
 // Создатель карточки Новое место
@@ -152,38 +144,25 @@ function sendFormNewCard(event) {
   // Отменяем стандартную отправку формы
   event.preventDefault();
   // Получае данные из формы
-  nameCards = popupCard.querySelectorAll('.popup__txt')[0].value;
-  linkCards = popupCard.querySelectorAll('.popup__txt')[1].value;
+  nameCard = popupCard.querySelector('[name="card-title"]').value;
+  linkCard = popupCard.querySelector('[name="card-link"]').value;
   // Добавляем новую карточку в начало контейнера
-  elements.prepend(addCards(nameCards, linkCards));
-  // Добавляем новую карточку в базу данных - массив
-  addNewCard(nameCards, linkCards);
-  // Удаляем 7-мую карточку
-  elements.querySelectorAll('.element')[6].remove();
+  elements.prepend(addCard(nameCard, linkCard));
   // Закрываем попап
   closePopup(popupCard);
 }
 
-// Записываем карточку в базу данных - массив
-function addNewCard(nameCards, linkCards) {
-  initialCards.unshift({
-   name: nameCards,
-   link: linkCards
-  });
- }
-
 // Начальный публикатор базы данных всех карт
 function addInitialCards () {
   initialCards.forEach(function (item) {
-    nameCards = item.name;
-    linkCards = item.link;
-    elements.append(addCards(nameCards, linkCards));
+    nameCard = item.name;
+    linkCard = item.link;
+    elements.append(addCard(nameCard, linkCard));
   });
 }
 
-// Запускаем слушатель кнопки - редактировать профиль
-listenProfileEdit();
-// Запускаем слушатель кнопки - добавить новое место
-listenAddCard();
+// Запускаем слушатели всех кнопок
+setEventListener();
+
 // Публикуем карточки по умолчанию 
 addInitialCards();
