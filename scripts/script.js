@@ -86,7 +86,7 @@ function closePopup (namePopup) {
 // Создатель карточки Новое место с названием, фото, и слушателями кнопок: лайк и корзина
 function addCard (nameCard, linkCard) {
   // клонируем шаблон карточки
-  element = elementTemplate.querySelector('.element').cloneNode(true);
+  const element = elementTemplate.querySelector('.element').cloneNode(true);
   // наполняем карточку содержимым - фото, заголовок и описание
   element.querySelector('.element__title').textContent = nameCard;
   element.querySelector('.element__foto').src = linkCard;
@@ -144,8 +144,8 @@ function sendFormNewCard(event) {
   // Отменяем стандартную отправку формы
   event.preventDefault();
   // Получае данные из формы
-  nameCard = popupCard.querySelector('[name="card-title"]').value;
-  linkCard = popupCard.querySelector('[name="card-link"]').value;
+  const nameCard = popupCard.querySelector('[name="card-title"]').value;
+  const linkCard = popupCard.querySelector('[name="card-link"]').value;
   // Добавляем новую карточку в начало контейнера
   elements.prepend(addCard(nameCard, linkCard));
   // Закрываем попап
@@ -155,8 +155,8 @@ function sendFormNewCard(event) {
 // Начальный публикатор базы данных всех карт
 function addInitialCards () {
   initialCards.forEach(function (item) {
-    nameCard = item.name;
-    linkCard = item.link;
+    const nameCard = item.name;
+    const linkCard = item.link;
     elements.append(addCard(nameCard, linkCard));
   });
 }
