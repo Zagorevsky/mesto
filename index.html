@@ -40,10 +40,14 @@
         <button class="popup__close" type="button"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
         <form class="popup__form" name="profile-name" novalidate>
-          <div class="popup__block-input"><input id="full-name" class="popup__input" type="text" name="full-name" required minlength="2" maxlength="40">
-          <span id="full-name-error" class="popup__error"></span></div>
-          <div class="popup__block-input"><input id="description" class="popup__input" type="text" name="description" required minlength="2" maxlength="200">
-          <span id="description-error" class="popup__error"></span></div>
+          <div class="popup__block-input"><input id="full-name" class="popup__input" type="text" name="full-name"
+              required minlength="2" maxlength="40">
+            <span id="full-name-error" class="popup__error"></span>
+          </div>
+          <div class="popup__block-input"><input id="description" class="popup__input" type="text" name="description"
+              required minlength="2" maxlength="200">
+            <span id="description-error" class="popup__error"></span>
+          </div>
           <button class="popup__button" type="submit"></button>
         </form>
       </div>
@@ -53,21 +57,25 @@
         <button class="popup__close" type="button"></button>
         <h2 class="popup__title">Новое место</h2>
         <form class="popup__form" name="card" novalidate>
-          <div class="popup__block-input"><input id="card-title" class="popup__input" type="text" name="card-title" placeholder="Название" required minlength="1" maxlength="30">
-          <span id="card-title-error" class="popup__error"></span></div>
-          <div class="popup__block-input"><input id="card-link" class="popup__input" type="url" name="card-link" placeholder="Ссылка на картинку" required >
-          <span id="card-link-error" class="popup__error"></span></div>
-          <button class="popup__button popup__button_card" type="submit"></button></div>
-        </form>
+          <div class="popup__block-input"><input id="card-title" class="popup__input" type="text" name="card-title"
+              placeholder="Название" required minlength="1" maxlength="30">
+            <span id="card-title-error" class="popup__error"></span>
+          </div>
+          <div class="popup__block-input"><input id="card-link" class="popup__input" type="url" name="card-link"
+              placeholder="Ссылка на картинку" required>
+            <span id="card-link-error" class="popup__error"></span>
+          </div>
+          <button class="popup__button popup__button_card" type="submit"></button>
+        </form>  
       </div>
-    </section>
-    <section class="popup popup_img">
-      <div class="popup__content popup__content_img">
-        <button class="popup__close" type="button"></button>
-        <img class="popup__image">
-        <h2 class="popup__title-img"></h2> 
-      </div>  
-    </section>
+  </section>
+  <section class="popup popup_img">
+    <div class="popup__content popup__content_img">
+      <button class="popup__close" type="button"></button>
+      <img class="popup__image">
+      <h2 class="popup__title-img"></h2>
+    </div>
+  </section>
   </div>
   <template id="element">
     <li class="element">
@@ -78,7 +86,7 @@
         <button class="element__like" type="button"></button>
       </div>
     </li>
-  </template> 
+  </template>
   <script src="./scripts/script.js"></script>
   <script src="./scripts/validate.js"></script>
 </body>
