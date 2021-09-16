@@ -55,11 +55,13 @@ const hideErrorInput = (errorElement, inputElement, inputErrorClass, errorClass)
 // показываем активную кнопку отправить
 const disableButtonSubmit = (buttonElement, inactiveButtonClass) => {
   buttonElement.classList.add(inactiveButtonClass);
+  buttonElement.disabled = true;
 } 
 
 // показываем скрытую кнопку отправить
 const enableButtonSubmit = (buttonElement, inactiveButtonClass) => {
   buttonElement.classList.remove(inactiveButtonClass);
+  buttonElement.disabled = false;
 } 
 
 // меняем вид кнопки в зависимости от валидности всех полей текущей фыормы

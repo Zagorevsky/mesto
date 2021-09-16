@@ -44,55 +44,40 @@ const popupCard = document.querySelector('.popup_card');
 // Получаем попап для просмотра картинки в попап
 const popupImg = document.querySelector('.popup_img');
 
-const keyСodeKeyboard = 'Escape';
+const imagePopup  = popupImg.querySelector('.popup__image');
+const titleImagePopup = popupImg.querySelector('.popup__title-img');
+
 const fullNameProfilePopup = popupProfile.querySelector('#full-name');
 const descriptionProfilePopup = popupProfile.querySelector('#description');
 const popupContenProfile = popupProfile.querySelector('.popup__content');
 const popupContenCard = popupCard.querySelector('.popup__content');
 const popupContenImg = popupImg.querySelector('.popup__content');
 
-
+// Устанавливаем слушатели на закрытие всех попап
+function setEventListenerPopupClose() {
+const popups = document.querySelectorAll('.popup');
+popups.forEach((popup) => {
+  popup.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup_opened')) {
+      closePopup(popup)
+    }
+    if (evt.target.classList.contains('popup__close')) {
+      closePopup(popup)
+    }
+  })
+})
+}
 
 function setEventListener() {
-// Cлушатель клика на оверлей попапа Профиль
-  popupProfile.addEventListener('click', ()=>{closePopup(popupProfile)}); 
-  popupContenProfile.addEventListener('click', (event)=>{event.stopPropagation()});
-// Слушатель клика на оверлей попап Новое место
-  popupCard.addEventListener('click', ()=>{closePopup(popupCard)});
-  popupContenCard.addEventListener('click', (event)=>{event.stopPropagation()});
-// Слушатель клика на оверлей попап Большое Фото
-  popupImg.addEventListener('click', ()=>{closePopup(popupImg)});
-  popupContenImg.addEventListener('click', (event)=>{event.stopPropagation()});
-
-  // Слушатель клавиатуры 
-  document.addEventListener('keydown', (event) => {
-    // если нажата нужная клавиша 
-    if (event.key === keyСodeKeyboard) {
-      // ищем активный попап 
-      const activePopup = document.querySelector('.popup_opened');
-      if (activePopup !== null) {
-        // если есть активный попап, то закрываем его
-        closePopup (activePopup);
-      }
-    }
-    });
-
 // Слушатель кнопки - редактировать профиль
   profileEdit.addEventListener('click',openPopupProfil);
 // Слушатель кнопки - добавить карту
   buttonAddCard.addEventListener('click', openPopupCard);
-// Слушатель кнопки закрыть попап Профиль
-  popupProfile.querySelector('.popup__close').addEventListener('click', ()=>{closePopup(popupProfile)});
-// Слушатель кнопки закрыть попап Новое место
-popupCard.querySelector('.popup__close').addEventListener('click',()=>{closePopup(popupCard)});
-// Слушатель кнопки закрыть попап Большое Фото
-  popupImg.querySelector('.popup__close').addEventListener('click', ()=>{closePopup(popupImg)});
 // Слушатель кнопки отправить форму Профиль
   popupProfile.querySelector('.popup__form').addEventListener('submit', sendFormProfil);
 // Слушатель кнопки отправить форму Новое место
   popupCard.querySelector('.popup__form').addEventListener('submit', sendFormNewCard);
 }
-
 
 // Обработчик кнопки корзина
 function deleteCard(evt) {
@@ -103,19 +88,24 @@ function toggleLike (evt) {
   evt.target.classList.toggle('element__like_active'); 
 }
 
+// закрытие попап по клавише ESC
+function closeByEscape(event) {
+  if (event.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  }
+}
+
 // Открыть попап
 function openPopup (namePopup) {
-  if (namePopup === popupImg) {
-    namePopup.classList.add('popup_opened');
-  } else {
-    validityOpenPopup(namePopup);
-    namePopup.classList.add('popup_opened');
-  }
+  document.addEventListener('keydown', closeByEscape);
+  namePopup.classList.add('popup_opened');
 }
 
 // Закрыть попап
 function closePopup (namePopup) {
   namePopup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeByEscape); 
 }
 
 // активность кнопки и сброс ошибок попап
@@ -154,12 +144,10 @@ function addCard (nameCard, linkCard) {
 
 // Обработчик клика по фото карточки
 function openImage (evt) {
-  // Получаем карточку по которой кликнули
-  const element = evt.target.closest('.element');
   // Наполняем попап данными из карточки
-  popupImg.querySelector('.popup__image').src = element.querySelector('.element__foto').src;
-  popupImg.querySelector('.popup__image').alt = element.querySelector('.element__foto').alt;
-  popupImg.querySelector('.popup__title-img').textContent = element.querySelector('.element__title').textContent;
+  imagePopup.src = evt.target.src;
+  imagePopup.alt = evt.target.alt;
+  titleImagePopup.textContent = evt.target.textContent;
   // Открываем попап
   openPopup (popupImg);
 }
@@ -168,33 +156,32 @@ function openImage (evt) {
 function openPopupProfil() {
   fullNameProfilePopup.value = fullNameProfile.textContent;
   descriptionProfilePopup.value = descriptionProfile.textContent;
+  // Удаляем сообщения об ошибках
+  validityOpenPopup(popupProfile);
   openPopup(popupProfile);
 }
 
 // Обработчик отправки формы профиль 
 function sendFormProfil() {
-  // если кнопка отправить в состоянии заблокированно , то функция не выполняется
-  if (!popupProfile.querySelector('.popup__button_disabled')) {
   // Наполняем данными попап
   fullNameProfile.textContent = fullNameProfilePopup.value;
   descriptionProfile.textContent = descriptionProfilePopup.value;
   // Закрываем попап
   closePopup(popupProfile);
-  }
 }
 
 // Открыть попап для создания карточки Новое место
 function openPopupCard(){
   // Делаем сброс формы
   popupCard.querySelector('.popup__form').reset();
+  // Удаляем сообщения об ошибках
+  validityOpenPopup(popupCard);
   // Открываем попап
   openPopup(popupCard);
-};
+}
 
 // Создатель карточки Новое место
 function sendFormNewCard() {
-  // если кнопка отправить в состоянии заблокированно , то функция не выполняется
-  if (!popupCard.querySelector('.popup__button_disabled')) {
   // Получае данные из формы
   const nameCard = popupCard.querySelector('[name="card-title"]').value;
   const linkCard = popupCard.querySelector('[name="card-link"]').value;
@@ -202,7 +189,6 @@ function sendFormNewCard() {
   elements.prepend(addCard(nameCard, linkCard));
   // Закрываем попап
   closePopup(popupCard);
-}
 }
 
 // Начальный публикатор базы данных всех карт
@@ -216,6 +202,7 @@ function addInitialCards () {
 
 // Запускаем слушатели всех кнопок
 setEventListener();
+setEventListenerPopupClose()
 
 // Публикуем карточки по умолчанию 
 addInitialCards();
