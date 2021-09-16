@@ -131,7 +131,7 @@ function addCard (nameCard, linkCard) {
   // наполняем карточку содержимым - фото, заголовок и описание
   element.querySelector('.element__title').textContent = nameCard;
   element.querySelector('.element__foto').src = linkCard;
-  element.querySelector('.element__foto').alt = `На фото ${nameCard}`;
+  element.querySelector('.element__foto').alt = nameCard;
   // добавляем слушатель клика по кнопке лайк
   element.querySelector('.element__like').addEventListener('click', toggleLike);
   // добавляем слушатель клика по кнопке корзина
@@ -147,7 +147,7 @@ function openImage (evt) {
   // Наполняем попап данными из карточки
   imagePopup.src = evt.target.src;
   imagePopup.alt = evt.target.alt;
-  titleImagePopup.textContent = evt.target.textContent;
+  titleImagePopup.textContent = evt.target.alt;
   // Открываем попап
   openPopup (popupImg);
 }
