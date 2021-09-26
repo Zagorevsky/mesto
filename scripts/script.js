@@ -1,3 +1,18 @@
+// Требования к коду
+// Эта самостоятельная работа отличается от предыдущих. До сих пор от вас требовалось реализовать какую-то функциональность. Вы думали, как заставить кнопки работать или сделать так, чтобы попап появлялся и исчезал. Сейчас весь функционал уже готов. Ваша задача — начать работу по организации кода.
+
+// Первое требование — добавить классы Card и FormValidator в код. Каждый из них выполняет строго одну задачу. Всё, что относится к решению этой задачи, находится внутри класса.
+
+// Второе требование — разбить JavaScript на модули. В проекте должно быть три js-файла:
+
+// Card.js с кодом класса Card,
+// FormValidator.js с кодом класса FormValidator,
+// index.js со всем остальным кодом.
+// Классы Card и FormValidator экспортируются из соответствующих файлов, импортируются в index.js и используются в нём.
+
+// Отдельные js-файлы подключены в index.html как модули.
+
+
 // база данных карточек для начала работы
 const initialCards = [
   {
@@ -35,23 +50,18 @@ const profileEdit = document.querySelector('.profile__edit');
 const buttonAddCard = document.querySelector('.profile__add-card');
 // Получаем контейнер для размещения карточек с фото
 const elements = document.querySelector('.elements');
-// Получаем шаблон для карточек с фото
-const elementTemplate = document.querySelector('#element').content;
 // Получаем попап для редактирования профиля
 const popupProfile = document.querySelector('.popup_profile');
 // Получаем попап для добавления новой карты
 const popupCard = document.querySelector('.popup_card');
-// Получаем попап для просмотра картинки в попап
-const popupImg = document.querySelector('.popup_img');
 
-const imagePopup  = popupImg.querySelector('.popup__image');
-const titleImagePopup = popupImg.querySelector('.popup__title-img');
+const cardSelector = '#element';
 
 const fullNameProfilePopup = popupProfile.querySelector('#full-name');
 const descriptionProfilePopup = popupProfile.querySelector('#description');
 const popupContenProfile = popupProfile.querySelector('.popup__content');
 const popupContenCard = popupCard.querySelector('.popup__content');
-const popupContenImg = popupImg.querySelector('.popup__content');
+// const popupContenImg = popupImg.querySelector('.popup__content');
 
 // Устанавливаем слушатели на закрытие всех попап
 function setEventListenerPopupClose() {
@@ -77,15 +87,6 @@ function setEventListener() {
   popupProfile.querySelector('.popup__form').addEventListener('submit', sendFormProfil);
 // Слушатель кнопки отправить форму Новое место
   popupCard.querySelector('.popup__form').addEventListener('submit', sendFormNewCard);
-}
-
-// Обработчик кнопки корзина
-function deleteCard(evt) {
-  evt.target.closest('.element').remove();
-}
-// Обработчик кнопки лайк
-function toggleLike (evt) {
-  evt.target.classList.toggle('element__like_active'); 
 }
 
 // закрытие попап по клавише ESC
@@ -124,34 +125,6 @@ const validityOpenPopup = (namePopup) => {
   });
 }
 
-// Создатель карточки Новое место с названием, фото, и слушателями кнопок: лайк и корзина
-function addCard (nameCard, linkCard) {
-  // клонируем шаблон карточки
-  const element = elementTemplate.querySelector('.element').cloneNode(true);
-  // наполняем карточку содержимым - фото, заголовок и описание
-  element.querySelector('.element__title').textContent = nameCard;
-  element.querySelector('.element__foto').src = linkCard;
-  element.querySelector('.element__foto').alt = nameCard;
-  // добавляем слушатель клика по кнопке лайк
-  element.querySelector('.element__like').addEventListener('click', toggleLike);
-  // добавляем слушатель клика по кнопке корзина
-  element.querySelector('.element__trash').addEventListener('click', deleteCard);
-  // добавляем слушатель клика по картинке
-  element.querySelector('.element__foto').addEventListener('click', openImage);
-  // возвращаем готовую карточку
-  return element;
-}
-
-// Обработчик клика по фото карточки
-function openImage (evt) {
-  // Наполняем попап данными из карточки
-  imagePopup.src = evt.target.src;
-  imagePopup.alt = evt.target.alt;
-  titleImagePopup.textContent = evt.target.alt;
-  // Открываем попап
-  openPopup (popupImg);
-}
-
 // Октрыть попап для редактировать профиля
 function openPopupProfil() {
   fullNameProfilePopup.value = fullNameProfile.textContent;
@@ -185,18 +158,23 @@ function sendFormNewCard() {
   // Получае данные из формы
   const nameCard = popupCard.querySelector('[name="card-title"]').value;
   const linkCard = popupCard.querySelector('[name="card-link"]').value;
+  // Создаем новый экземпляр класса Card
+  const card = new Card(nameCard, linkCard, cardSelector);
   // Добавляем новую карточку в начало контейнера
-  elements.prepend(addCard(nameCard, linkCard));
+  elements.prepend(card.addCard());
   // Закрываем попап
   closePopup(popupCard);
 }
 
-// Начальный публикатор базы данных всех карт
+
 function addInitialCards () {
-  initialCards.forEach(function (item) {
-    const nameCard = item.name;
-    const linkCard = item.link;
-    elements.append(addCard(nameCard, linkCard));
+// Начальный публикатор базы данных всех карт
+  initialCards.forEach((item) => {
+    const card = new Card(item.name, item.link, cardSelector);
+    const cardElement = card.addCard();
+
+  // Добавляем в DOM
+    document.querySelector('.elements').append(cardElement);
   });
 }
 
@@ -206,3 +184,5 @@ setEventListenerPopupClose()
 
 // Публикуем карточки по умолчанию 
 addInitialCards();
+
+
