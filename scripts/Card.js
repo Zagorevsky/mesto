@@ -6,9 +6,6 @@
 // содержит один публичный метод, который возвращает полностью работоспособный и наполненный данными элемент карточки.
 // Для каждой карточки создайте экземпляр класса Card.
 
-// Требования к коду
-// Эта самостоятельная работа отличается от предыдущих. До сих пор от вас требовалось реализовать какую-то функциональность. Вы думали, как заставить кнопки работать или сделать так, чтобы попап появлялся и исчезал. Сейчас весь функционал уже готов. Ваша задача — начать работу по организации кода.
-
 // Первое требование — добавить классы Card и FormValidator в код. Каждый из них выполняет строго одну задачу. Всё, что относится к решению этой задачи, находится внутри класса.
 
 // Второе требование — разбить JavaScript на модули. В проекте должно быть три js-файла:
@@ -20,47 +17,39 @@
 
 // Отдельные js-файлы подключены в index.html как модули.
 
-class Card {
+import { openImagePopup } from "./index.js"
 
-  static _popupImg = document.querySelector('.popup_img');
-  static _imagePopup  = Card._popupImg.querySelector('.popup__image');
-  static _titleImagePopup = Card._popupImg.querySelector('.popup__title-img');
+export class Card {
 
   constructor(nameCard, linkCard, selectorCard) {
     this._nameCard = nameCard;
     this._linkCard = linkCard;
-    this._selectorCard = selectorCard
+    this._selectorCard = selectorCard;
   }
 
   _getTemplate() {
     // забираем разметку из HTML и клонируем элемент
     const cardElement = document
-    .querySelector(this._selectorCard)
-    .content.querySelector('.element')
-    .cloneNode(true);
-    
-    // вернём DOM-элемент карточки .querySelector('.element').cloneNode(true);
+      .querySelector(this._selectorCard)
+      .content.querySelector('.element')
+      .cloneNode(true);
+    // вернём DOM-элемент карточки
     return cardElement;
-  } 
-  
+  }
+
   // Удаляем карту 
-  _deleteCard(evt) {
+  _deleteCard = (evt) => {
     evt.target.closest('.element').remove();
   }
 
   // Обработчик кнопки лайк
-  _toggleLike(evt) {
+  _toggleLike = (evt) => {
     evt.target.classList.toggle('element__like_active');
   }
 
-  // Открыть картинку в попап
-  _openImagePopup(evt) {
-    // Наполняем попап данными из карточки
-  Card._imagePopup.src = evt.target.src;
-  Card._imagePopup.alt = evt.target.alt;
-  Card._titleImagePopup.textContent = evt.target.alt;
-  // Открываем попап
-  Card._popupImg.classList.add('popup_opened');
+  // Открытие картинки в попап
+  _openImagePopup = (evt) => {
+    openImagePopup(evt);
   }
 
   // Слушатели на карте

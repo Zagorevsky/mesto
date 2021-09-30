@@ -1,19 +1,18 @@
-// Требования к коду
-// Эта самостоятельная работа отличается от предыдущих. До сих пор от вас требовалось реализовать какую-то функциональность. Вы думали, как заставить кнопки работать или сделать так, чтобы попап появлялся и исчезал. Сейчас весь функционал уже готов. Ваша задача — начать работу по организации кода.
-
-// Первое требование — добавить классы Card и FormValidator в код. Каждый из них выполняет строго одну задачу. Всё, что относится к решению этой задачи, находится внутри класса.
-
+// Первое требование — добавить классы Card и FormValidator в код. Каждый из них выполняет строго одну задачу. 
+// Всё, что относится к решению этой задачи, находится внутри класса.
 // Второе требование — разбить JavaScript на модули. В проекте должно быть три js-файла:
 
 // Card.js с кодом класса Card,
 // FormValidator.js с кодом класса FormValidator,
 // index.js со всем остальным кодом.
 // Классы Card и FormValidator экспортируются из соответствующих файлов, импортируются в index.js и используются в нём.
-
 // Отдельные js-файлы подключены в index.html как модули.
 
 
-// база данных карточек для начала работы
+import { Card } from './Card.js';
+import { FormValidator } from './FormValidator.js';
+
+// база данных карточек
 const initialCards = [
   {
     name: 'Архыз',
@@ -41,6 +40,7 @@ const initialCards = [
   }
 ];
 
+
 // Получаем текущее содержание профиля
 const fullNameProfile = document.querySelector('.profile__full-name');
 const descriptionProfile = document.querySelector('.profile__description');
@@ -54,43 +54,45 @@ const elements = document.querySelector('.elements');
 const popupProfile = document.querySelector('.popup_profile');
 // Получаем попап для добавления новой карты
 const popupCard = document.querySelector('.popup_card');
-
+const popupImg = document.querySelector('.popup_img');
+const imagePopup = popupImg.querySelector('.popup__image');
+const titleImagePopup = popupImg.querySelector('.popup__title-img');
 const cardSelector = '#element';
 
 const fullNameProfilePopup = popupProfile.querySelector('#full-name');
 const descriptionProfilePopup = popupProfile.querySelector('#description');
-const popupContenProfile = popupProfile.querySelector('.popup__content');
-const popupContenCard = popupCard.querySelector('.popup__content');
+// const popupContenProfile = popupProfile.querySelector('.popup__content');
+// const popupContenCard = popupCard.querySelector('.popup__content');
 // const popupContenImg = popupImg.querySelector('.popup__content');
 
 // Устанавливаем слушатели на закрытие всех попап
-function setEventListenerPopupClose() {
-const popups = document.querySelectorAll('.popup');
-popups.forEach((popup) => {
-  popup.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('popup_opened')) {
-      closePopup(popup)
-    }
-    if (evt.target.classList.contains('popup__close')) {
-      closePopup(popup)
-    }
+const setEventListenerPopupClose = () => {
+  const popups = document.querySelectorAll('.popup');
+  popups.forEach((popup) => {
+    popup.addEventListener('click', (evt) => {
+      if (evt.target.classList.contains('popup_opened')) {
+        closePopup(popup)
+      }
+      if (evt.target.classList.contains('popup__close')) {
+        closePopup(popup)
+      }
+    })
   })
-})
 }
 
-function setEventListener() {
-// Слушатель кнопки - редактировать профиль
-  profileEdit.addEventListener('click',openPopupProfil);
-// Слушатель кнопки - добавить карту
+const setEventListener = () => {
+  // Слушатель кнопки - редактировать профиль
+  profileEdit.addEventListener('click', openPopupProfil);
+  // Слушатель кнопки - добавить карту
   buttonAddCard.addEventListener('click', openPopupCard);
-// Слушатель кнопки отправить форму Профиль
+  // Слушатель кнопки отправить форму Профиль
   popupProfile.querySelector('.popup__form').addEventListener('submit', sendFormProfil);
-// Слушатель кнопки отправить форму Новое место
+  // Слушатель кнопки отправить форму Новое место
   popupCard.querySelector('.popup__form').addEventListener('submit', sendFormNewCard);
 }
 
 // закрытие попап по клавише ESC
-function closeByEscape(event) {
+const closeByEscape = (event) => {
   if (event.key === 'Escape') {
     const openedPopup = document.querySelector('.popup_opened');
     closePopup(openedPopup);
@@ -98,35 +100,37 @@ function closeByEscape(event) {
 }
 
 // Открыть попап
-function openPopup (namePopup) {
+const openPopup = (namePopup) => {
   document.addEventListener('keydown', closeByEscape);
   namePopup.classList.add('popup_opened');
 }
 
 // Закрыть попап
-function closePopup (namePopup) {
+const closePopup = (namePopup) => {
   namePopup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', closeByEscape); 
+  document.removeEventListener('keydown', closeByEscape);
 }
 
-// активность кнопки и сброс ошибок попап
+// сброс ошибок попап
 const validityOpenPopup = (namePopup) => {
   const inputList = Array.from(namePopup.querySelectorAll('.popup__input'));
-  const submitButtonSelector = '.popup__button';
-  const inactiveButtonClass = 'popup__button_disabled';
+  const buttonElement = namePopup.querySelector('.popup__button');
   const inputErrorClass = 'popup__input_type_error';
   const errorClass = 'popup__error_visible';
-  // проверяем и устанавливаем активность кнопки на момент открытия попап
-  toggleButtonState (namePopup, inputList, submitButtonSelector, inactiveButtonClass);
-  // сбрасываем ошибки открываемой формы
+  // устанавливаем активность кнопки
+  buttonElement.classList.add('popup__button_disabled');
+  buttonElement.disabled = true;
+  // очищаем поля ошибок
   inputList.forEach(inputElement => {
     const errorElement = namePopup.querySelector(`#${inputElement.id}-error`);
-    hideErrorInput(errorElement, inputElement, inputErrorClass, errorClass);
+    inputElement.classList.remove(inputErrorClass);
+    errorElement.textContent = '';
+    errorElement.classList.remove(errorClass);;
   });
 }
 
 // Октрыть попап для редактировать профиля
-function openPopupProfil() {
+const openPopupProfil = () => {
   fullNameProfilePopup.value = fullNameProfile.textContent;
   descriptionProfilePopup.value = descriptionProfile.textContent;
   // Удаляем сообщения об ошибках
@@ -134,8 +138,19 @@ function openPopupProfil() {
   openPopup(popupProfile);
 }
 
+// Обработчик клика по фото карточки 
+export const openImagePopup = (evt) => {
+  // Наполняем попап данными из карточки 
+  imagePopup.src = evt.target.src;
+  imagePopup.alt = evt.target.alt;
+  titleImagePopup.textContent = evt.target.alt;
+  // Открываем попап 
+  openPopup(popupImg);
+}
+
+
 // Обработчик отправки формы профиль 
-function sendFormProfil() {
+const sendFormProfil = () => {
   // Наполняем данными попап
   fullNameProfile.textContent = fullNameProfilePopup.value;
   descriptionProfile.textContent = descriptionProfilePopup.value;
@@ -144,7 +159,7 @@ function sendFormProfil() {
 }
 
 // Открыть попап для создания карточки Новое место
-function openPopupCard(){
+const openPopupCard = () => {
   // Делаем сброс формы
   popupCard.querySelector('.popup__form').reset();
   // Удаляем сообщения об ошибках
@@ -154,7 +169,7 @@ function openPopupCard(){
 }
 
 // Создатель карточки Новое место
-function sendFormNewCard() {
+const sendFormNewCard = () => {
   // Получае данные из формы
   const nameCard = popupCard.querySelector('[name="card-title"]').value;
   const linkCard = popupCard.querySelector('[name="card-link"]').value;
@@ -166,14 +181,12 @@ function sendFormNewCard() {
   closePopup(popupCard);
 }
 
-
-function addInitialCards () {
-// Начальный публикатор базы данных всех карт
+const addInitialCards = () => {
+  // Начальный публикатор базы данных всех карт
   initialCards.forEach((item) => {
     const card = new Card(item.name, item.link, cardSelector);
     const cardElement = card.addCard();
-
-  // Добавляем в DOM
+    // Добавляем в DOM
     document.querySelector('.elements').append(cardElement);
   });
 }
@@ -185,4 +198,25 @@ setEventListenerPopupClose()
 // Публикуем карточки по умолчанию 
 addInitialCards();
 
+// Создаем валидаторы для каждой формы
+const setValidation = (config) => {
+  // получаем список форм на странице
+  const formList = Array.from(document.querySelectorAll('.popup__form'));
+  // сбрасываем стандартную отправку и устанавливаем слушатели на каждую форму из списка 
+  formList.forEach(formElement => {
+    formElement.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+    })
+    // 
+    const form = new FormValidator(config, formElement);
+    form.enableValidation();
+  });
+}
 
+setValidation({
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+});
