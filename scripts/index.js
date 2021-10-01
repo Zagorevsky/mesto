@@ -49,7 +49,7 @@ const profileEdit = document.querySelector('.profile__edit');
 // Получаем кнопку добавить карту
 const buttonAddCard = document.querySelector('.profile__add-card');
 // Получаем контейнер для размещения карточек с фото
-const elements = document.querySelector('.elements');
+const cardsContainer = document.querySelector('.elements');
 // Получаем попап для редактирования профиля
 const popupProfile = document.querySelector('.popup_profile');
 // Получаем попап для добавления новой карты
@@ -61,9 +61,14 @@ const cardSelector = '#element';
 
 const fullNameProfilePopup = popupProfile.querySelector('#full-name');
 const descriptionProfilePopup = popupProfile.querySelector('#description');
-// const popupContenProfile = popupProfile.querySelector('.popup__content');
-// const popupContenCard = popupCard.querySelector('.popup__content');
-// const popupContenImg = popupImg.querySelector('.popup__content');
+
+const config = {
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
 
 // Устанавливаем слушатели на закрытие всех попап
 const setEventListenerPopupClose = () => {
@@ -111,30 +116,13 @@ const closePopup = (namePopup) => {
   document.removeEventListener('keydown', closeByEscape);
 }
 
-// сброс ошибок попап
-const validityOpenPopup = (namePopup) => {
-  const inputList = Array.from(namePopup.querySelectorAll('.popup__input'));
-  const buttonElement = namePopup.querySelector('.popup__button');
-  const inputErrorClass = 'popup__input_type_error';
-  const errorClass = 'popup__error_visible';
-  // устанавливаем активность кнопки
-  buttonElement.classList.add('popup__button_disabled');
-  buttonElement.disabled = true;
-  // очищаем поля ошибок
-  inputList.forEach(inputElement => {
-    const errorElement = namePopup.querySelector(`#${inputElement.id}-error`);
-    inputElement.classList.remove(inputErrorClass);
-    errorElement.textContent = '';
-    errorElement.classList.remove(errorClass);;
-  });
-}
-
 // Октрыть попап для редактировать профиля
 const openPopupProfil = () => {
   fullNameProfilePopup.value = fullNameProfile.textContent;
   descriptionProfilePopup.value = descriptionProfile.textContent;
   // Удаляем сообщения об ошибках
-  validityOpenPopup(popupProfile);
+  const form = new FormValidator(config, popupProfile);
+  form.resetValidation();
   openPopup(popupProfile);
 }
 
@@ -163,7 +151,8 @@ const openPopupCard = () => {
   // Делаем сброс формы
   popupCard.querySelector('.popup__form').reset();
   // Удаляем сообщения об ошибках
-  validityOpenPopup(popupCard);
+  const form = new FormValidator(config, popupCard);
+  form.resetValidation();
   // Открываем попап
   openPopup(popupCard);
 }
@@ -176,7 +165,7 @@ const sendFormNewCard = () => {
   // Создаем новый экземпляр класса Card
   const card = new Card(nameCard, linkCard, cardSelector);
   // Добавляем новую карточку в начало контейнера
-  elements.prepend(card.addCard());
+  cardsContainer.prepend(card.addCard());
   // Закрываем попап
   closePopup(popupCard);
 }
@@ -187,16 +176,9 @@ const addInitialCards = () => {
     const card = new Card(item.name, item.link, cardSelector);
     const cardElement = card.addCard();
     // Добавляем в DOM
-    document.querySelector('.elements').append(cardElement);
+    cardsContainer.append(cardElement);
   });
 }
-
-// Запускаем слушатели всех кнопок
-setEventListener();
-setEventListenerPopupClose()
-
-// Публикуем карточки по умолчанию 
-addInitialCards();
 
 // Создаем валидаторы для каждой формы
 const setValidation = (config) => {
@@ -213,10 +195,11 @@ const setValidation = (config) => {
   });
 }
 
-setValidation({
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-});
+// Запускаем слушатели всех кнопок
+setEventListener();
+setEventListenerPopupClose()
+
+// Публикуем карточки по умолчанию 
+addInitialCards();
+
+setValidation(config);

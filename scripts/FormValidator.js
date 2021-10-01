@@ -6,7 +6,6 @@
 // имеет один публичный метод enableValidation, который включает валидацию формы.
 //  Для каждой проверяемой формы создайте экземпляр класса FormValidator.
 
-
 export class FormValidator {
 
   constructor(config, formElement) {
@@ -15,23 +14,31 @@ export class FormValidator {
     this._inactiveButtonClass = config.inactiveButtonClass;
     this._inputErrorClass = config.inputErrorClass;
     this._errorClass = config.errorClass;
-    this._formElement = formElement
+    this._formElement = formElement;
+    this._inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
+    this._buttonElement = this._formElement.querySelector(this._submitButtonSelector);
   }
 
-  // включение валидации каждого поля текущей формы
-
   enableValidation() {
-    // получаем список полей текущей формы
-    const _inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
     // устанавливаем слушатель по событию ввода символа в цикле на каждое поле
-    _inputList.forEach(_inputElement => {
+    this._inputList.forEach(_inputElement => {
       _inputElement.addEventListener('input', () => {
         // проверяем валидность поля
         this._checkInputValidity(_inputElement);
         // переключаем состояние кнопки отправить
-        this._toggleButtonState(_inputList);
+        this._toggleButtonState();
       })
-      this._toggleButtonState(_inputList);
+      this._toggleButtonState();
+    })
+  }
+
+  resetValidation() {
+    // определяем и устанавливаем статус кнопки
+    this._toggleButtonState();
+    // сбрасываем ошибки старой валидации
+    this._inputList.forEach(_inputElement => {
+    const _errorElement = this._formElement.querySelector(`#${_inputElement.id}-error`);
+    this._hideErrorInput(_errorElement, _inputElement);
     })
   }
 
@@ -50,12 +57,11 @@ export class FormValidator {
   }
 
   // меняем вид кнопки в зависимости от валидности всех полей текущей фыормы
-  _toggleButtonState(_inputList) {
-    const _buttonElement = this._formElement.querySelector(this._submitButtonSelector);
-    if (this._hasValidInputs(_inputList)) {
-      this._enableButtonSubmit(_buttonElement)
+  _toggleButtonState() {
+    if (this._hasValidInputs(this._inputList)) {
+      this._enableButtonSubmit()
     } else {
-      this._disableButtonSubmit(_buttonElement)
+      this._disableButtonSubmit()
     }
   }
 
@@ -73,21 +79,21 @@ export class FormValidator {
     _errorElement.classList.remove(this._errorClass);
   }
 
-  // показываем активную кнопку отправить
-  _disableButtonSubmit(_buttonElement) {
-    _buttonElement.classList.add(this._inactiveButtonClass);
-    _buttonElement.disabled = true;
+  // показываем скрытую кнопку отправить
+  _disableButtonSubmit() {
+    this._buttonElement.classList.add(this._inactiveButtonClass);
+    this._buttonElement.disabled = true;
   }
 
-  // показываем скрытую кнопку отправить
-  _enableButtonSubmit(_buttonElement) {
-    _buttonElement.classList.remove(this._inactiveButtonClass);
-    _buttonElement.disabled = false;
+  // показываем активную кнопку отправить
+  _enableButtonSubmit() {
+    this._buttonElement.classList.remove(this._inactiveButtonClass);
+    this._buttonElement.disabled = false;
   }
 
   // проверяем валидность всех полей одновременно
-  _hasValidInputs(_inputList) {
-    const _validInputs = _inputList.every((_inputElement) => {
+  _hasValidInputs() {
+    const _validInputs = this._inputList.every((_inputElement) => {
       return _inputElement.validity.valid
     })
     return _validInputs
