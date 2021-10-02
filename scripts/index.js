@@ -185,7 +185,7 @@ const addInitialCards = () => {
   });
 }
 
-// Создаем валидаторы для каждой формы
+// отменяем стандартную отправку форм
 const setPreventDefaultSubmit = () => {
   // получаем список форм на странице
   const formList = Array.from(document.querySelectorAll('.popup__form'));
