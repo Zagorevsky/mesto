@@ -70,6 +70,13 @@ const config = {
   errorClass: 'popup__error_visible'
 };
 
+//  экземпляр валидации формы новой карты
+const formValidatorCard = new FormValidator(config, popupCard);
+
+// экземпляр валидации формы профиля
+const formValidatorProfile = new FormValidator(config, popupProfile)
+
+
 // Устанавливаем слушатели на закрытие всех попап
 const setEventListenerPopupClose = () => {
   const popups = document.querySelectorAll('.popup');
@@ -121,8 +128,7 @@ const openPopupProfil = () => {
   fullNameProfilePopup.value = fullNameProfile.textContent;
   descriptionProfilePopup.value = descriptionProfile.textContent;
   // Удаляем сообщения об ошибках
-  const form = new FormValidator(config, popupProfile);
-  form.resetValidation();
+  formValidatorProfile.resetValidation();
   openPopup(popupProfile);
 }
 
@@ -151,8 +157,7 @@ const openPopupCard = () => {
   // Делаем сброс формы
   popupCard.querySelector('.popup__form').reset();
   // Удаляем сообщения об ошибках
-  const form = new FormValidator(config, popupCard);
-  form.resetValidation();
+  formValidatorCard.resetValidation();
   // Открываем попап
   openPopup(popupCard);
 }
@@ -181,7 +186,7 @@ const addInitialCards = () => {
 }
 
 // Создаем валидаторы для каждой формы
-const setValidation = (config) => {
+const setPreventDefaultSubmit = () => {
   // получаем список форм на странице
   const formList = Array.from(document.querySelectorAll('.popup__form'));
   // сбрасываем стандартную отправку и устанавливаем слушатели на каждую форму из списка 
@@ -189,9 +194,6 @@ const setValidation = (config) => {
     formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
     })
-    // 
-    const form = new FormValidator(config, formElement);
-    form.enableValidation();
   });
 }
 
@@ -202,4 +204,9 @@ setEventListenerPopupClose()
 // Публикуем карточки по умолчанию 
 addInitialCards();
 
-setValidation(config);
+// отменяем стандартную отправку форм
+setPreventDefaultSubmit();
+
+// запускаем владиацию форм
+formValidatorCard.enableValidation();
+formValidatorProfile.enableValidation();
