@@ -6,7 +6,7 @@
 // имеет один публичный метод enableValidation, который включает валидацию формы.
 //  Для каждой проверяемой формы создайте экземпляр класса FormValidator.
 
-export class FormValidator {
+export default class FormValidator {
 
   constructor(config, formElement) {
     this._inputSelector = config.inputSelector;

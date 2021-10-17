@@ -15,16 +15,16 @@
 // index.js со всем остальным кодом.
 // Классы Card и FormValidator экспортируются из соответствующих файлов, импортируются в index.js и используются в нём.
 
-// Отдельные js-файлы подключены в index.html как модули.
+// Свяжите класс Card c попапом. Сделайте так, чтобы Card принимал в конструктор функцию handleCardClick. 
+// Эта функция должна открывать попап с картинкой при клике на карточку.
 
-import { openImagePopup } from "./index.js"
+export default class Card {
 
-export class Card {
-
-  constructor(nameCard, linkCard, selectorCard) {
-    this._nameCard = nameCard;
-    this._linkCard = linkCard;
+  constructor(dataCard, selectorCard, {handleCardClick}) {
+    this._nameCard = dataCard.name;
+    this._linkCard = dataCard.link;
     this._selectorCard = selectorCard;
+    this.handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
@@ -47,11 +47,6 @@ export class Card {
     evt.target.classList.toggle('element__like_active');
   }
 
-  // Открытие картинки в попап
-  _openImagePopup = (evt) => {
-    openImagePopup(evt);
-  }
-
   // Слушатели на карте
   _setEventListeners() {
     // добавляем слушатель клика по кнопке лайк
@@ -59,7 +54,7 @@ export class Card {
     // // добавляем слушатель клика по кнопке корзина
     this.element.querySelector('.element__trash').addEventListener('click', this._deleteCard);
     // // добавляем слушатель клика по картинке
-    this.element.querySelector('.element__foto').addEventListener('click', this._openImagePopup);
+    this.element.querySelector('.element__foto').addEventListener('click', this.handleCardClick);
   }
 
   addCard() {
