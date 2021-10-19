@@ -61,15 +61,19 @@ const userInfo = new UserInfo({
   description: descriptionProfile
 });
 
+// функция создания Новой карточки
+const generatorCard = (dataCard) => {
+  const card = new Card(dataCard, cardSelector, {
+    handleCardClick: (evt) => { popupWithImage.open(evt) }
+  });
+  return card.addCard();
+}
 
 // экземпляр класса попап - Новая карточка
 const popupWithFormCard = new PopupWithForm(popupCard, {
   callbackSubmitForm: (dataCard) => {
-    const card = new Card(dataCard, cardSelector, {
-      handleCardClick: (evt) => { popupWithImage.open(evt) }
-    })
-    const cardElement = card.addCard();
-    cardsContainer.prepend(cardElement);
+    const cardElement = generatorCard(dataCard);
+    defaultCardList.addItem(cardElement);
     popupWithFormCard.close()
   }
 });
@@ -84,12 +88,9 @@ const popupWithFormProfile = new PopupWithForm(popupProfile, {
 
 // Начальный публикатор базы данных всех карт
 const defaultCardList = new Section({
-  items: initialCards,
+  items: initialCards.reverse(),
   renderer: (item) => {
-    const card = new Card(item, cardSelector, {
-      handleCardClick: (evt) => { popupWithImage.open(evt) }
-    })
-    const cardElement = card.addCard();
+    const cardElement = generatorCard(item);
     defaultCardList.addItem(cardElement);
   }
 }, cardsContainer);

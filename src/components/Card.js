@@ -38,8 +38,10 @@ export default class Card {
   }
 
   // Удаляем карту 
-  _deleteCard = (evt) => {
-    evt.target.closest('.element').remove();
+  _deleteCard = () => {
+    // удаляем элемент и зануляем его
+    this._element.remove();
+    this._element = null;
   }
 
   // Обработчик кнопки лайк
@@ -50,22 +52,23 @@ export default class Card {
   // Слушатели на карте
   _setEventListeners() {
     // добавляем слушатель клика по кнопке лайк
-    this.element.querySelector('.element__like').addEventListener('click', this._toggleLike);
+    this._element.querySelector('.element__like').addEventListener('click', this._toggleLike);
     // // добавляем слушатель клика по кнопке корзина
-    this.element.querySelector('.element__trash').addEventListener('click', this._deleteCard);
+    this._element.querySelector('.element__trash').addEventListener('click', this._deleteCard);
     // // добавляем слушатель клика по картинке
-    this.element.querySelector('.element__foto').addEventListener('click', this.handleCardClick);
+    this._element.querySelector('.element__foto').addEventListener('click', this.handleCardClick);
   }
 
   addCard() {
     // клонируем шаблон карточки
-    this.element = this._getTemplate();
+    this._element = this._getTemplate();
+    const _elementFoto = this._element.querySelector('.element__foto');
     this._setEventListeners();
     // наполняем карточку содержимым - фото, заголовок и описание
-    this.element.querySelector('.element__title').textContent = this._nameCard;
-    this.element.querySelector('.element__foto').src = this._linkCard;
-    this.element.querySelector('.element__foto').alt = this._nameCard;
+    this._element.querySelector('.element__title').textContent = this._nameCard;
+    _elementFoto.src = this._linkCard;
+    _elementFoto.alt = this._nameCard;
     // возвращаем готовую карточку
-    return this.element;
+    return this._element;
   }
 }

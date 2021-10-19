@@ -1,3 +1,4 @@
 .popup_img { 
   background-color: rgba(0, 0, 0, .9);
+  z-index: 2;
 }
