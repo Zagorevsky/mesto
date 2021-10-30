@@ -125,7 +125,7 @@ const popupWithFormCard = new PopupWithForm(popupCard, {
       .catch((err) => {
         console.log(err); // выведем ошибку в консоль
       })
-      .finally(()=>{buttonSaveState();});
+      .finally(() => { buttonSaveState(); });
   }
 });
 
@@ -183,7 +183,7 @@ const popupWithFormProfile = new PopupWithForm(popupProfile, {
       .catch((err) => {
         console.log(err); // выведем ошибку в консоль
       })
-      .finally(()=>{buttonSaveState();});
+      .finally(() => { buttonSaveState(); });
   }
 });
 
@@ -205,7 +205,7 @@ const popupWithFormAvatar = new PopupWithForm(popupAvatar, {
       .catch((err) => {
         console.log(err); // выведем ошибку в консоль
       })
-      .finally(()=>{buttonSaveState();});
+      .finally(() => { buttonSaveState(); });
   }
 });
 
@@ -240,8 +240,8 @@ buttonAddCard.addEventListener('click', () => {
 
 // меняем кнопку на момент загрузки - Сохранение..
 const buttonSaveState = () => {
-  popupButtonList.forEach((popup) => { 
-  popup.classList.toggle('popup__button_save');
+  popupButtonList.forEach((popup) => {
+    popup.classList.toggle('popup__button_save');
   });
 }
 
