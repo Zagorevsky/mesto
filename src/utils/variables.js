@@ -2,7 +2,7 @@
 export const initialCards = [
     {
       name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
     },
     {
       name: 'Челябинская область',
@@ -48,6 +48,9 @@ export const popupCard = document.querySelector('.popup_card');
 export const popupImg = document.querySelector('.popup_img');
 // Получаем попап для редактирования аватара
 export const popupAvatar = document.querySelector('.popup_avatar');
+// Получаем кнопку попап
+export const popupButtonList = document.querySelectorAll('.popup__button');
+
 export const cardSelector = '#element';
 
 export const fullNameProfilePopup = popupProfile.querySelector('#full-name');

@@ -1,19 +1,4 @@
-// Работа 7
-// Первое требование — добавить классы Card и FormValidator в код. Каждый из них выполняет строго одну задачу. 
-// Всё, что относится к решению этой задачи, находится внутри класса.
-// Второе требование — разбить JavaScript на модули. В проекте должно быть три js-файла:
 
-// Card.js с кодом класса Card,
-// FormValidator.js с кодом класса FormValidator,
-// index.js со всем остальным кодом.
-// Классы Card и FormValidator экспортируются из соответствующих файлов, импортируются в index.js и используются в нём.
-// Отдельные js-файлы подключены в index.html как модули.
-
-// Работа 8
-// - Добавьте в проект классы `Section`, `Popup`, `PopupWithForm`, `PopupWithImage` и `UserInfo`. Каждый из них выполняет  строго одну задачу. Всё, что относится к решению этой задачи, находится внутри класса.
-// - Если классы нужно связать друг с другом, делайте это передаваемой в конструктор функцией-колбэком.
-// - Все классы должны быть вынесены в отдельные файлы.
-// - В файле `index.js` должно остаться только создание классов и добавление некоторых обработчиков.
 import './index.css';
 import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
@@ -25,7 +10,7 @@ import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api';
 import {
   // база данных карточек
-  // initialCards,
+  initialCards,
   // Получаем текущее содержание профиля
   fullNameProfile,
   descriptionProfile,
@@ -54,6 +39,8 @@ import {
   descriptionProfilePopup,
   // аватар в попап
   avatarPopup,
+  // получаем кнопку попап
+  popupButtonList,
   authorization,
   // данные для валидации
   config
@@ -90,8 +77,7 @@ const popupWithImage = new PopupWithImage(popupImg);
 // экземпляр класса попап подтверждения удаления
 const popupWithSubmit = new PopupWithSubmit(popupDelitCard);
 
-
-// первичная загрузка данных
+// первичная загрузка данных пользователя
 api.getInitialProfile()
   .then((profile) => {
     userInfo.setUserInfo({
@@ -102,7 +88,6 @@ api.getInitialProfile()
     return profile._id;
   })
   .then((idProfile) => {
-
     // получаем данные карточек с сервера и выводим на экран
     api.getInitialCards()
       .then((result) => {
@@ -114,19 +99,38 @@ api.getInitialProfile()
             defaultCardList.addItem(cardElement);
           }
         }, cardsContainer);
-        defaultCardList.renderItems();
+        defaultCardList.renderItems(result);
       })
-      .catch((err) => { console.log(err); });
-
+      .catch((err) => {
+        console.log(err);
+      });
   })
   .catch((err) => { console.log(err); }
-
   );
 
+// экземпляр класса попап - Новая карточка
+const popupWithFormCard = new PopupWithForm(popupCard, {
+  callbackSubmitForm: (dataCard) => {
+    buttonSaveState();
+    api.addCardToServer({
+      name: dataCard.name,
+      link: dataCard.link,
+    })
+      .then((dataCard) => {
+        const defaultCardList = new Section({}, cardsContainer);
+        const cardElement = generatorCard(dataCard, dataCard.owner._id);
+        defaultCardList.addItem(cardElement);
+        popupWithFormCard.close()
+      })
+      .catch((err) => {
+        console.log(err); // выведем ошибку в консоль
+      })
+      .finally(()=>{buttonSaveState();});
+  }
+});
 
 // функция создания Новой карточки
 const generatorCard = (dataCard, idProfile) => {
-
   const card = new Card(dataCard, cardSelector, idProfile, {
     handleCardClick: (evt) => { popupWithImage.open(evt) },
     handleLikeClick: (id, like) => {
@@ -147,8 +151,8 @@ const generatorCard = (dataCard, idProfile) => {
     handleDeleteIconClick: (idCard) => {
       popupWithSubmit.submitCardDelit(() => {
         api.deleteCardToServer(idCard)
-          .then(() => { 
-            popupWithSubmit.close(); 
+          .then(() => {
+            popupWithSubmit.close();
             card.deleteCard();
           })
           .catch((err) => { console.log(err); });
@@ -163,6 +167,7 @@ const generatorCard = (dataCard, idProfile) => {
 // экземпляр класса попап - редактировать профиль
 const popupWithFormProfile = new PopupWithForm(popupProfile, {
   callbackSubmitForm: (userInfoPopup) => {
+    buttonSaveState();
     api.addProfileToServer({
       name: userInfoPopup.fullname,
       about: userInfoPopup.description
@@ -177,13 +182,15 @@ const popupWithFormProfile = new PopupWithForm(popupProfile, {
       })
       .catch((err) => {
         console.log(err); // выведем ошибку в консоль
-      });
+      })
+      .finally(()=>{buttonSaveState();});
   }
 });
 
 // экземпляр класса попап - редактировать аватар
 const popupWithFormAvatar = new PopupWithForm(popupAvatar, {
   callbackSubmitForm: (data) => {
+    buttonSaveState();
     api.addAvatarToServer({
       avatar: data.avatar,
     })
@@ -193,31 +200,12 @@ const popupWithFormAvatar = new PopupWithForm(popupAvatar, {
           description: profile.about,
           avatar: profile.avatar,
         });
-
         popupWithFormAvatar.close();
       })
       .catch((err) => {
         console.log(err); // выведем ошибку в консоль
-      });
-  }
-});
-
-// экземпляр класса попап - Новая карточка
-const popupWithFormCard = new PopupWithForm(popupCard, {
-  callbackSubmitForm: (dataCard) => {
-    api.addCardToServer({
-      name: dataCard.name,
-      link: dataCard.link,
-    })
-      .then((dataCard) => {
-        const defaultCardList = new Section({}, cardsContainer);
-        const cardElement = generatorCard(dataCard, dataCard.owner._id);
-        defaultCardList.addItem(cardElement);
-        popupWithFormCard.close()
       })
-      .catch((err) => {
-        console.log(err); // выведем ошибку в консоль
-      });
+      .finally(()=>{buttonSaveState();});
   }
 });
 
@@ -249,6 +237,13 @@ buttonAddCard.addEventListener('click', () => {
   // Открываем попап Новая карта
   popupWithFormCard.open()
 });
+
+// меняем кнопку на момент загрузки - Сохранение..
+const buttonSaveState = () => {
+  popupButtonList.forEach((popup) => { 
+  popup.classList.toggle('popup__button_save');
+  });
+}
 
 // подключаем слушатели 
 popupWithFormCard.setEventListeners();

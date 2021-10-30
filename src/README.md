@@ -23,6 +23,7 @@
 * Псевдоклассы
 * OOП
 * Webpack
+* API подключен проект к серверу
 
 * [Ссылка на проект Mesto](https://zagorevsky.github.io/mesto/)
 

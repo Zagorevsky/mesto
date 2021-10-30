@@ -85,7 +85,7 @@ export default class Card {
     // добавляем слушатель клика по картинке
     this._element.querySelector('.element__foto').addEventListener('click', this.handleCardClick);
   }
-  
+
   // выводим кол-во лайков
   showNumberLikes(likes) {
     const _elementNumberLikes = this._element.querySelector('.element__number-likes');
