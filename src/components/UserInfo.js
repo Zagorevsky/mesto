@@ -7,16 +7,18 @@
 
 export default class UserInfo {
 
-  constructor({fullname, description}) {
+  constructor({fullname, description, avatar}) {
     this._fullname = fullname;
     this._description = description;
+    this._avatar = avatar;
   }
   
   // - Содержит публичный метод `getUserInfo`, который возвращает объект с данными пользователя. Этот метод пригодится когда данные пользователя нужно будет подставить в форму при открытии.
   getUserInfo() {
     return {
     fullname: this._fullname.textContent,
-    description: this._description.textContent
+    description: this._description.textContent,
+    avatar:this._avatar.src,
     }
   }
   
@@ -24,6 +26,7 @@ export default class UserInfo {
   setUserInfo(userInfoNew) {
     this._fullname.textContent = userInfoNew.fullname;
     this._description.textContent = userInfoNew.description;
+    this._avatar.src = userInfoNew.avatar;
   }
 
 }

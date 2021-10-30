@@ -1,5 +1,4 @@
 // Создайте класс Card, который создаёт карточку с текстом и ссылкой на изображение:
-
 // принимает в конструктор её данные и селектор её template-элемента;
 // содержит приватные методы, которые работают с разметкой, устанавливают слушателей событий;
 // содержит приватные методы для каждого обработчика;
@@ -20,11 +19,16 @@
 
 export default class Card {
 
-  constructor(dataCard, selectorCard, {handleCardClick}) {
+  constructor(dataCard, selectorCard, idProfile, { handleCardClick, handleLikeClick, handleDeleteIconClick }) {
+    this._dataCard = dataCard;
     this._nameCard = dataCard.name;
     this._linkCard = dataCard.link;
+    this._likes = dataCard.likes
     this._selectorCard = selectorCard;
+    this._idProfile = idProfile;
     this.handleCardClick = handleCardClick;
+    this.handleLikeClick = handleLikeClick;
+    this.handleDeleteIconClick = handleDeleteIconClick;
   }
 
   _getTemplate() {
@@ -38,25 +42,54 @@ export default class Card {
   }
 
   // Удаляем карту 
-  _deleteCard = () => {
+  deleteCard = () => {
     // удаляем элемент и зануляем его
     this._element.remove();
     this._element = null;
   }
 
+  // скрыть удаление карты
+  _hideDelitCard() {
+    if (this._dataCard.owner._id !== this._idProfile) {
+      this._element.querySelector('.element__trash').classList.add('element_hidden');
+    }
+  }
+
   // Обработчик кнопки лайк
-  _toggleLike = (evt) => {
-    evt.target.classList.toggle('element__like_active');
+  _toggleLike = () => {
+    this._elementLike.classList.toggle('element__like_active');
+  }
+
+  // устанавливаем наш лайк на фотку при загрузке с сервера
+  _checkStatusLike = () => {
+    const id = this._dataCard.likes.map(el => el._id);
+    const _like = id.includes(this._idProfile);
+    if (_like) {
+      this._toggleLike();
+    }
   }
 
   // Слушатели на карте
   _setEventListeners() {
     // добавляем слушатель клика по кнопке лайк
-    this._element.querySelector('.element__like').addEventListener('click', this._toggleLike);
-    // // добавляем слушатель клика по кнопке корзина
-    this._element.querySelector('.element__trash').addEventListener('click', this._deleteCard);
-    // // добавляем слушатель клика по картинке
+    this._elementLike = this._element.querySelector('.element__like');
+    this._elementLike.addEventListener('click', () => {
+      this.like = this._elementLike.classList.contains('element__like_active');
+      this.handleLikeClick(this._dataCard._id, this.like);
+      this._toggleLike();
+    });
+    // добавляем слушатель клика по кнопке корзина
+    this._element.querySelector('.element__trash').addEventListener('click', () => {
+      this.handleDeleteIconClick(this._dataCard._id);
+    });
+    // добавляем слушатель клика по картинке
     this._element.querySelector('.element__foto').addEventListener('click', this.handleCardClick);
+  }
+  
+  // выводим кол-во лайков
+  showNumberLikes(likes) {
+    const _elementNumberLikes = this._element.querySelector('.element__number-likes');
+    _elementNumberLikes.textContent = likes;
   }
 
   addCard() {
@@ -68,6 +101,12 @@ export default class Card {
     this._element.querySelector('.element__title').textContent = this._nameCard;
     _elementFoto.src = this._linkCard;
     _elementFoto.alt = this._nameCard;
+    // устанавливаем кол-во лайков
+    this.showNumberLikes(this._likes.length);
+    // устанавливаем наш лайк на карте
+    this._checkStatusLike();
+    // запрещаем удаление чужих карт
+    this._hideDelitCard();
     // возвращаем готовую карточку
     return this._element;
   }

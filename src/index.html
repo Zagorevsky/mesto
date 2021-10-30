@@ -18,7 +18,12 @@
     <main class="content">
       <section class="profile">
         <div class="profile__info">
-          <img class="profile__avatar"  src="<%=require('./images/kusto.jpg')%>" alt="Аватар - фото пользователя">
+        <div class="profile__container">
+          <img class="profile__avatar" src="<%=require('./images/kusto.jpg')%>">
+          <div class="profile__overlay">
+            <div class="profile__edit-avatar"></div>
+          </div>
+        </div>
           <div class="profile__text">
             <h1 class="profile__full-name">Жак-Ив Кусто</h1>
             <button class="profile__edit" type="button"></button>
@@ -75,6 +80,28 @@
         <h2 class="popup__title-img"></h2>
       </div>
     </section>
+    <section class="popup popup_delit-card">
+      <div class="popup__content popup__content_delit">
+        <button class="popup__close" type="button"></button>
+        <h2 class="popup__title">Вы уверены?</h2>
+        <form class="popup__form" name="delit" novalidate>
+          <button class="popup__button popup__button_delit" type="submit"></button>
+        </form>
+      </div>
+    </section>
+    <section class="popup popup_avatar">
+      <div class="popup__content popup__content_avatar">
+        <button class="popup__close" type="button"></button>
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form class="popup__form" name="avatar" novalidate>
+          <div class="popup__block-input"><input id="avatar-link" class="popup__input" type="url" name="avatar"
+              placeholder="Ссылка на аватар" required>
+            <span id="avatar-link-error" class="popup__error"></span>
+          </div>
+          <button class="popup__button popup__button_avatar" type="submit"></button>
+        </form>
+      </div>
+    </section>
   </div>
   <template id="element">
     <li class="element">
@@ -82,7 +109,10 @@
       <img class="element__foto" alt="">
       <div class="element__blok">
         <h2 class="element__title"></h2>
-        <button class="element__like" type="button"></button>
+        <div class="element__blok-likes">
+          <button class="element__like" type="button"></button>
+          <div class="element__number-likes">100</div>
+        </div>
       </div>
     </li>
   </template>
