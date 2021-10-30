@@ -46,6 +46,7 @@
 .popup__button_card{background-image:url(3b97144cf85c31544717.svg)}
 .popup__button_delit{background-image:url(d19d645ba83b029c5ea7.svg);margin-top:0}
 .popup__button_disabled{opacity:.2}.popup__button:hover{cursor:default;opacity:.2}
+.popup__button_save{background-image:url(aa18f55b1ec927b1249c.svg)}
 .popup__title-img{color:#fff;font-size:12px;font-weight:400;line-height:15px;margin:10px 0 0;padding:0}
 .popup__error_visible{display:inline}
 
