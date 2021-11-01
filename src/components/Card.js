@@ -56,7 +56,7 @@ export default class Card {
   }
 
   // Обработчик кнопки лайк
-  _toggleLike = () => {
+  toggleLike = () => {
     this._elementLike.classList.toggle('element__like_active');
   }
 
@@ -65,7 +65,7 @@ export default class Card {
     const id = this._dataCard.likes.map(el => el._id);
     const _like = id.includes(this._idProfile);
     if (_like) {
-      this._toggleLike();
+      this.toggleLike();
     }
   }
 
@@ -76,7 +76,6 @@ export default class Card {
     this._elementLike.addEventListener('click', () => {
       this.like = this._elementLike.classList.contains('element__like_active');
       this.handleLikeClick(this._dataCard._id, this.like);
-      this._toggleLike();
     });
     // добавляем слушатель клика по кнопке корзина
     this._element.querySelector('.element__trash').addEventListener('click', () => {

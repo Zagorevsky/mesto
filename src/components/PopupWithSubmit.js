@@ -9,14 +9,14 @@ export default class PopupWithSubmit extends Popup {
   setEventListeners() {
     this._selectorPopup.querySelector('.popup__form').addEventListener('submit', (evt)=>{
       evt.preventDefault();
-      this._data();
+      this._handler();
     })
     super.setEventListeners();
   }
     
   // метод передачи данных или функции
-  submitCardDelit(data) {
-      this._data = data;
+  submitCardDelit(handler) {
+    this._handler = handler;
   }
   
 }

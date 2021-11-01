@@ -48,15 +48,11 @@ export const popupCard = document.querySelector('.popup_card');
 export const popupImg = document.querySelector('.popup_img');
 // Получаем попап для редактирования аватара
 export const popupAvatar = document.querySelector('.popup_avatar');
-// Получаем кнопку попап
-export const popupButtonList = document.querySelectorAll('.popup__button');
 
 export const cardSelector = '#element';
 
 export const fullNameProfilePopup = popupProfile.querySelector('#full-name');
 export const descriptionProfilePopup = popupProfile.querySelector('#description');
-
-export const avatarPopup = popupAvatar.querySelector('#avatar-link');
 
 export const popupDelitCard = document.querySelector('.popup_delit-card');
 
@@ -68,4 +64,12 @@ export const config = {
   errorClass: 'popup__error_visible'
 };
 
+// ключ авторизации
 export const authorization = 'd1eaf8fa-cbb9-444a-9cdf-dc241738dbf6'
+
+// тексты кнопок попап
+export const buttonTextSave = 'Сохранить';
+
+export const buttonTextCreate = 'Создать';
+
+export const buttonTextLoad = 'Сохранение...';

@@ -10,6 +10,8 @@ export default class PopupWithForm extends Popup {
   constructor(selectorPopup, {callbackSubmitForm}) {
     super(selectorPopup);
     this.callbackSubmitForm = callbackSubmitForm;
+    this.buttonPopup = this._selectorPopup.querySelector('.popup__button');
+    this.popuForm = this._selectorPopup.querySelector('.popup__form');
   }
 
   // - Содержит приватный метод `_getInputValues`, который собирает данные всех полей формы.
@@ -25,16 +27,21 @@ export default class PopupWithForm extends Popup {
   // - Перезаписывает родительский метод `close`, так как при закрытии попапа форма должна ещё и сбрасываться.
   close() {
     super.close();
-    this._selectorPopup.querySelector('.popup__form').reset();
+    this.popuForm.reset();
   }
 
   // - Перезаписывает родительский метод `setEventListeners`. 
   //   Метод `_setEventListeners` класса `PopupWithForm` должен не только добавлять обработчик клика иконке закрытия, но и добавлять обработчик сабмита формы.
   setEventListeners() {
     super.setEventListeners();
-    this._selectorPopup.querySelector('.popup__form').addEventListener('submit', (evt)=>{
+    this.popuForm.addEventListener('submit', (evt)=>{
       evt.preventDefault();
       this.callbackSubmitForm(this._getInputValues());
     })
   }
+
+    renderLoading(buttonText) {
+      this.buttonPopup.textContent = buttonText;
+    }
+ 
 }
