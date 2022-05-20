@@ -21,3 +21,6 @@
 - JavaScript
 
 API сервера Яндекс.Практикум
+
+ Сайт https://zagorevsky.github.io/mesto/
+ 
