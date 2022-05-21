@@ -40,5 +40,4 @@
     npm run dev
 
 
- #### Сайт https://zagorevsky.github.io/mesto/
- 
+#### Сайт: https://zagor.students.nomoredomains.work
